@@ -1,0 +1,607 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArchPortfolio | Современная архитектура</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
+            color: #1a1a2e;
+            line-height: 1.5;
+        }
+
+        /* Glassmorphism эффекты */
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Навбар */
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 16px 32px;
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-section {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .auth-input {
+            padding: 10px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: white;
+        }
+
+            .auth-input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+        /* Кнопки */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .btn-secondary:hover {
+                background: #e2e8f0;
+            }
+
+        /* Контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        /* Форма добавления */
+        .form-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 48px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+            .form-group.full-width {
+                grid-column: span 3;
+            }
+
+            .form-group label {
+                font-size: 14px;
+                font-weight: 600;
+                color: #475569;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 12px 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                font-size: 14px;
+                transition: all 0.2s;
+                font-family: inherit;
+            }
+
+                .form-group input:focus,
+                .form-group textarea:focus {
+                    outline: none;
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
+
+            .form-group textarea {
+                resize: vertical;
+                min-height: 80px;
+            }
+
+        /* Сетка проектов */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 32px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+            .project-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            }
+
+        .project-image {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .project-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .placeholder-icon {
+            font-size: 64px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .project-info {
+            padding: 24px;
+        }
+
+            .project-info h3 {
+                font-size: 18px;
+                font-weight: 700;
+                margin-bottom: 12px;
+                color: #1a1a2e;
+            }
+
+            .project-info p {
+                color: #64748b;
+                font-size: 14px;
+                line-height: 1.6;
+                margin-bottom: 16px;
+            }
+
+        .project-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .btn-delete {
+            width: 100%;
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .btn-delete:hover {
+                background: #fecaca;
+            }
+
+        /* Статус */
+        .status {
+            text-align: center;
+            padding: 60px;
+            color: #64748b;
+            background: white;
+            border-radius: 24px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .token-badge {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #475569;
+            font-family: monospace;
+        }
+
+        /* Секции */
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #1a1a2e, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навбар -->
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="logo">
+                <div class="logo-icon">🏛️</div>
+                <h1>ArchPortfolio</h1>
+            </div>
+            <div class="auth-section">
+                <input type="text" id="loginUsername" class="auth-input" placeholder="Логин">
+                <input type="password" id="loginPassword" class="auth-input" placeholder="Пароль">
+                <button class="btn-primary" onclick="login()">Войти</button>
+                <button class="btn-secondary" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Форма добавления проекта -->
+        <div class="form-card hidden" id="addForm">
+            <div class="form-title">
+                <span>✨</span>
+                <span>Новый архитектурный проект</span>
+            </div>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>Название проекта</label>
+                    <input type="text" id="projectName" placeholder="Например: Жилой комплекс «Солнечный»">
+                </div>
+                <div class="form-group full-width">
+                    <label>Описание</label>
+                    <textarea id="projectDesc" placeholder="Расскажите о проекте..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Год</label>
+                    <input type="number" id="projectYear" placeholder="2024">
+                </div>
+                <div class="form-group">
+                    <label>ID архитектора</label>
+                    <input type="number" id="architectId" placeholder="1">
+                </div>
+                <div class="form-group">
+                    <label>ID категории</label>
+                    <input type="number" id="categoryId" placeholder="1">
+                </div>
+                <div class="form-group full-width">
+                    <label>URL изображения</label>
+                    <input type="text" id="projectImageUrl" placeholder="https://example.com/photo.jpg">
+                </div>
+            </div>
+            <button class="btn-primary" onclick="createProject()" style="width: 100%; margin-top: 8px;">➕ Создать проект</button>
+        </div>
+
+        <!-- Список проектов -->
+        <div>
+            <h2 class="section-title">📐 Актуальные проекты</h2>
+            <div id="projectsContainer">
+                <div class="status">Загрузка проектов...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API URL (замени порт на свой!)
+        const API_URL = 'http://localhost:5013';
+
+        let authToken = localStorage.getItem('authToken') || '';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+            loadProjects();
+        });
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                alert('Введите логин и пароль');
+                return;
+            }
+
+            try {
+                const formData = new URLSearchParams();
+                formData.append('username', username);
+                formData.append('password', password);
+
+                const response = await fetch(`${API_URL}/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.access_token;
+                    localStorage.setItem('authToken', authToken);
+                    updateAuthUI();
+                    alert('Добро пожаловать!');
+                } else {
+                    alert('Неверный логин или пароль');
+                }
+            } catch (error) {
+                console.error('Ошибка входа:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+
+        function logout() {
+            authToken = '';
+            localStorage.removeItem('authToken');
+            updateAuthUI();
+            alert('Вы вышли из системы');
+        }
+
+        function updateAuthUI() {
+            const addForm = document.getElementById('addForm');
+            const tokenStatus = document.getElementById('tokenStatus');
+
+            if (authToken) {
+                addForm.classList.remove('hidden');
+            } else {
+                addForm.classList.add('hidden');
+            }
+        }
+
+        async function loadProjects() {
+            const container = document.getElementById('projectsContainer');
+            try {
+                const response = await fetch(`${API_URL}/api/projects`);
+                if (response.ok) {
+                    const projects = await response.json();
+                    displayProjects(projects);
+                } else {
+                    container.innerHTML = '<div class="status">❌ Ошибка загрузки</div>';
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                container.innerHTML = '<div class="status">❌ Не удалось подключиться к серверу</div>';
+            }
+        }
+
+        function displayProjects(projects) {
+            const container = document.getElementById('projectsContainer');
+            if (!projects || projects.length === 0) {
+                container.innerHTML = '<div class="status">📭 Пока нет проектов. Создайте первый!</div>';
+                return;
+            }
+
+            container.innerHTML = `
+                    <div class="projects-grid">
+                        ${projects.map(project => `
+                            <div class="project-card">
+                                <div class="project-image">
+                                    ${project.imageUrl ? `<img src="${project.imageUrl}" alt="${escapeHtml(project.name)}">` : '<div class="placeholder-icon">🏛️</div>'}
+                                </div>
+                                <div class="project-info">
+                                    <h3>${escapeHtml(project.name)}</h3>
+                                    <p>${escapeHtml(project.description || 'Нет описания')}</p>
+                                    <div class="project-meta">
+                                        <span class="meta-tag">📅 ${project.year || '—'}</span>
+                                        <span class="meta-tag">👤 ${escapeHtml(project.architectName || 'Не указан')}</span>
+                                        <span class="meta-tag">📂 ${escapeHtml(project.categoryName || 'Не указана')}</span>
+                                    </div>
+                                    ${authToken ? `<button class="btn-delete" onclick="deleteProject(${project.id})">🗑️ Удалить проект</button>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+        }
+
+        async function createProject() {
+            if (!authToken) {
+                alert('Сначала войдите в систему');
+                return;
+            }
+
+            const projectData = {
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('projectDesc').value,
+                year: parseInt(document.getElementById('projectYear').value) || 2024,
+                imageUrl: document.getElementById('projectImageUrl').value,
+                architectId: parseInt(document.getElementById('architectId').value) || 1,
+                categoryId: parseInt(document.getElementById('categoryId').value) || 1
+            };
+
+            if (!projectData.name) {
+                alert('Введите название проекта');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/projects`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(projectData)
+                });
+
+                if (response.ok) {
+                    alert('✅ Проект успешно создан!');
+                    document.getElementById('projectName').value = '';
+                    document.getElementById('projectDesc').value = '';
+                    document.getElementById('projectYear').value = '';
+                    document.getElementById('projectImageUrl').value = '';
+                    loadProjects();
+                } else {
+                    const error = await response.text();
+                    alert('❌ Ошибка создания: ' + error);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+
+        async function deleteProject(id) {
+            if (!authToken) {
+                alert('Сначала войдите в систему');
+                return;
+            }
+            if (!confirm('Вы уверены, что хотите удалить этот проект?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/api/projects/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (response.ok) {
+                    alert('✅ Проект удалён');
+                    loadProjects();
+                } else {
+                    alert('Ошибка удаления');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
